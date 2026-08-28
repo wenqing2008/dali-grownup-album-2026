@@ -1,0 +1,15 @@
+# OS / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 本地 Agent 工作区
+.workbuddy/
+.omo/
+.codegraph/
+.opencode/
+
+# 备份与历史版本
+*.bak
+*.html.bak
