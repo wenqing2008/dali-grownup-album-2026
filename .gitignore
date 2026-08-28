@@ -13,3 +13,5 @@ Thumbs.db
 # 备份与历史版本
 *.bak
 *.html.bak
+# 字体子集化中间产物(不提交)
+.fontsrc/
