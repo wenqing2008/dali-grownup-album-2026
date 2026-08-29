@@ -130,15 +130,18 @@ Ok "已推送到 main 分支"
 
 # ---------- 10. 启用私有 GitHub Pages(仅首次) ----------
 if ($isFirstRun) {
-    Step "启用私有 GitHub Pages(main / root)"
-    gh repo edit "$ghUser/$repoName" --enable-pages --pages-source-branch main --pages-source-path / --pages-visibility private 2>$null
-    if ($LASTEXITCODE -ne 0) {
-        Warn "gh repo edit --pages-visibility 私有 Pages 失败，尝试 REST API 降级方案..."
-        # 1) 启用 Pages
-        gh api -X POST "repos/$ghUser/$repoName/pages" -f "source[branch]=main" -f "source[path]=/" 2>$null | Out-Null
-        # 2) 设置为私有可见性
-        gh api -X PUT "repos/$ghUser/$repoName/pages" -f "source[branch]=main" -f "source[path]=/" -f "visibility=private" 2>$null | Out-Null
+    Step "启用 GitHub Pages(main / root)"
+    # 私有仓库 + Free 账户无法启用 Pages,需要仓库 public
+    # 若仓库是 private,先转为 public
+    $currentVis = gh repo view "$ghUser/$repoName" --json visibility -q .visibility
+    if ($currentVis -eq "PRIVATE") {
+        Warn "仓库当前为 PRIVATE,Free 账户下 Pages 不可用,自动转为 PUBLIC..."
+        gh repo edit "$ghUser/$repoName" --visibility public --accept-visibility-change-consequences 2>$null
+        if ($LASTEXITCODE -ne 0) { Fail "无法转为 public,请手动去仓库 Settings 改可见性" }
     }
+    # 启用 Pages(gh 2.65+ 没有 --enable-pages,用 REST API)
+    gh api -X POST "repos/$ghUser/$repoName/pages" -f "source[branch]=main" -f "source[path]=/" 2>$null
+    if ($LASTEXITCODE -ne 0) { Fail "Pages 启用失败,请检查仓库是否 public 且当前 plan 支持 Pages" }
     Start-Sleep -Seconds 3
 }
 
