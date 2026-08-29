@@ -158,90 +158,159 @@
     }
   </style>
 
-<style>
-/* ================= 移动端极速自适应增强 ================= */
+<style id="master-album-styles">
+/* ================= 全局核心兜底样式 ================= */
+* {
+  box-sizing: border-box !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif !important;
+  margin: 0 !important;
+  padding: 20px 10px !important;
+  background-color: #060b14 !important;
+  color: #1e293b !important;
+  overflow-x: hidden !important;
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #dfba53 0%, #fae69e 40%, #b88628 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.page-card {
+  width: 100% !important;
+  max-width: 1040px !important;
+  background: #ffffff !important;
+  border-radius: 28px !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 核心照片槽标准样式，彻底杜绝黑块与坍塌 */
+.photo-slot {
+  position: relative !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  border-radius: 14px !important;
+  background: #1e293b !important;
+  display: block !important;
+}
+
+.photo-slot.has-image {
+  background: #0f172a !important;
+  border: 1px solid rgba(203, 213, 225, 0.4) !important;
+}
+
+.photo-slot img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  transition: transform 0.3s ease !important;
+}
+
+/* 关键 aspect-ratio 类名转义匹配 */
+.aspect-\[3\/4\], [class*="aspect-[3/4]"], .aspect-3-4 {
+  aspect-ratio: 3 / 4 !important;
+}
+.aspect-\[4\/3\], [class*="aspect-[4/3]"], .aspect-4-3 {
+  aspect-ratio: 4 / 3 !important;
+}
+.aspect-\[16\/9\], [class*="aspect-[16/9]"], .aspect-16-9 {
+  aspect-ratio: 16 / 9 !important;
+}
+.aspect-square, [class*="aspect-square"] {
+  aspect-ratio: 1 / 1 !important;
+}
+
+/* 隐藏编辑器悬浮层 */
+.slot-overlay {
+  display: none !important;
+}
+
+/* ================= 移动端精准响应式 (<= 640px) ================= */
 @media screen and (max-width: 640px) {
   body {
-    padding: 8px 4px !important;
-    background-color: #060b14 !important;
-  }
-  .page-card {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    border-radius: 16px !important;
-    overflow: hidden !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+    padding: 8px 4px 60px 4px !important;
   }
   
-  /* 封面 Hero 区域与标题自适应 */
-  h1.text-4xl {
+  .page-card {
+    border-radius: 18px !important;
+  }
+  
+  /* 封面大标题 */
+  h1.text-4xl, .text-4xl {
     font-size: 1.65rem !important;
     line-height: 1.35 !important;
-    letter-spacing: 0.05em !important;
+    letter-spacing: 0.04em !important;
+    margin-top: 0.5rem !important;
   }
-  p.text-lg {
-    font-size: 0.95rem !important;
+  
+  p.text-lg, .text-lg {
+    font-size: 0.92rem !important;
+    line-height: 1.5 !important;
     letter-spacing: 0.02em !important;
+    margin-top: 0.5rem !important;
   }
   
-  /* 照片插槽宽高比保护，防止加载塌陷黑块 */
-  .photo-slot {
-    min-height: 140px !important;
-    border-radius: 10px !important;
+  /* 解决封面日期横条被挤压成竖排的问题 */
+  .max-w-xl {
+    max-width: 100% !important;
   }
-  .aspect-\[3\/4\] {
-    aspect-ratio: 3/4 !important;
+  .mt-7.flex.justify-center.items-center {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.35rem 0.5rem !important;
+    font-size: 10.5px !important;
+    line-height: 1.4 !important;
+    padding: 0.5rem 0.25rem !important;
   }
-  .aspect-\[4\/3\] {
-    aspect-ratio: 4/3 !important;
-  }
-  .aspect-\[16\/9\] {
-    aspect-ratio: 16/9 !important;
-  }
-  .aspect-square {
-    aspect-ratio: 1/1 !important;
+  .mt-7.flex.justify-center.items-center span {
+    white-space: nowrap !important;
   }
   
-  /* 网格在手机小屏下的自适应布局 */
+  /* 封面三图网格 */
   .grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 0.5rem !important;
+    gap: 0.45rem !important;
   }
+  
+  /* 章节四图网格在手机上变为 2x2 */
   .grid-cols-4 {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 0.5rem !important;
   }
-  .gap-4 {
-    gap: 0.6rem !important;
-  }
-  .gap-6 {
-    gap: 0.75rem !important;
-  }
   
-  /* 内边距精细化压缩 */
+  /* 章节内边距优化 */
   .p-10 {
-    padding: 1.25rem 0.85rem !important;
+    padding: 1.25rem 0.75rem !important;
   }
   .p-8 {
-    padding: 1rem 0.75rem !important;
+    padding: 1rem 0.65rem !important;
   }
   .space-y-12 > :not([hidden]) ~ :not([hidden]) {
-    margin-top: 1.75rem !important;
+    margin-top: 1.5rem !important;
   }
   
-  /* 父母签名区域自适应 */
+  /* 父母寄语与签名 */
   .parent-signature-art {
-    max-width: 120px !important;
+    width: 110px !important;
     height: auto !important;
   }
   
-  /* 音乐悬浮按钮优化 */
+  /* 音乐播放控件浮窗适配 */
   #albumMusicPlayer {
-    bottom: 16px !important;
-    right: 16px !important;
-    transform: scale(0.9) !important;
+    bottom: 12px !important;
+    right: 12px !important;
+    transform: scale(0.88) !important;
     transform-origin: bottom right !important;
+    z-index: 9999 !important;
   }
 }
 </style>
